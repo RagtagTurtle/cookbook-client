@@ -22,8 +22,9 @@ class Client::RecipesController < ApplicationController
                             "http://localhost:3000/api/recipes",
                             parameters: client_params
                             )
+    recipe = response.body
 
-    render 'create.html.erb'
+    redirect_to "/client/recipes/#{recipe["id"]}"
   end
 
   def show
@@ -53,7 +54,9 @@ class Client::RecipesController < ApplicationController
                             "http://localhost:3000/api/recipes/#{params[:id]}",
                             parameters: client_params
                             )
-    render 'update.html.erb'
+    recipe = response.body
+    flash[:success] = "Successfully Updated Recipe"
+    redirect_to "/client/recipes/#{ recipe["id"]}"
   end
 
   def destroy
@@ -61,6 +64,6 @@ class Client::RecipesController < ApplicationController
     response = Unirest.delete(
                               "http://localhost:3000/api/recipes/#{ recipe_id }"
                               )
-    render 'destroy.html.erb'
+    redirect_to "/"
   end
 end
